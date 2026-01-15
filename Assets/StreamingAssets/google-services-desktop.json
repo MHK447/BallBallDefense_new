@@ -1,0 +1,31 @@
+{
+  "project_info": {
+    "project_number": "1044374056454",
+    "project_id": "tinycastleguardians",
+    "storage_bucket": "tinycastleguardians.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1044374056454:ios:23ee2c03ed96f849c5dd87",
+        "android_client_info": {
+          "package_name": "com.banpofri.tinycastleguardians"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsAsQzqirpj6Pz14GoRtgREGJxxxB8_Hs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 0
+        },
+        "appinvite_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
