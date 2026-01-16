@@ -111,14 +111,14 @@ public class HUDTotal : UIBase
 
     public void RegisterContentsOpen()
     {
-        GameRoot.Instance.ContentsOpenSystem.RegisterOpenWaitContentByStage(ContentsOpenSystem.ContentsOpenType.TRAININGOPEN, CheckContentsOpen_Training);
-        GameRoot.Instance.ContentsOpenSystem.RegisterOpenWaitContentByStage(ContentsOpenSystem.ContentsOpenType.CARDOPEN, CheckContentsOpen_Card);
+        // GameRoot.Instance.ContentsOpenSystem.RegisterOpenWaitContentByStage(ContentsOpenSystem.ContentsOpenType.TRAININGOPEN, CheckContentsOpen_Training);
+        // GameRoot.Instance.ContentsOpenSystem.RegisterOpenWaitContentByStage(ContentsOpenSystem.ContentsOpenType.CARDOPEN, CheckContentsOpen_Card);
     }
 
     public void EnqueueTutorialContentsOpen()
     {
-        CheckContentsOpen_Training(true);
-        CheckContentsOpen_Card(true);
+        // CheckContentsOpen_Training(true);
+        // CheckContentsOpen_Card(true);
     }
 
     public void UpdateButtonLock()
@@ -185,62 +185,62 @@ public class HUDTotal : UIBase
 
 
 
-    private void CheckContentsOpen_Training(bool action)
-    {
-        if (!action) return;
+    // private void CheckContentsOpen_Training(bool action)
+    // {
+    //     if (!action) return;
 
-        if (!GameRoot.Instance.TutorialSystem.IsClearTuto(TutorialSystem.Tuto_5)
-            && GameRoot.Instance.ContentsOpenSystem.ContentsOpenCheck(ContentsOpenSystem.ContentsOpenType.TRAININGOPEN))
-        {
-            GameRoot.Instance.ActionQueueSystem.Append(() =>
-            {
-                GameObject target = HudBottomBtnList[(int)HudBottomBtnType.TRAINING].GetLockObj;
-                GameRoot.Instance.UISystem.OpenUI<PopupContentsOpen>(popup =>
-                {
-                    popup.Set(ContentsOpenSystem.ContentsOpenType.TRAININGOPEN, target.transform as RectTransform, () =>
-                    {
-                        HudBottomBtnList[(int)HudBottomBtnType.TRAINING].SetLocked(false);
-                        GameRoot.Instance.TutorialSystem.StartTutorial(TutorialSystem.Tuto_5);
+    //     if (!GameRoot.Instance.TutorialSystem.IsClearTuto(TutorialSystem.Tuto_5)
+    //         && GameRoot.Instance.ContentsOpenSystem.ContentsOpenCheck(ContentsOpenSystem.ContentsOpenType.TRAININGOPEN))
+    //     {
+    //         GameRoot.Instance.ActionQueueSystem.Append(() =>
+    //         {
+    //             GameObject target = HudBottomBtnList[(int)HudBottomBtnType.TRAINING].GetLockObj;
+    //             GameRoot.Instance.UISystem.OpenUI<PopupContentsOpen>(popup =>
+    //             {
+    //                 popup.Set(ContentsOpenSystem.ContentsOpenType.TRAININGOPEN, target.transform as RectTransform, () =>
+    //                 {
+    //                     HudBottomBtnList[(int)HudBottomBtnType.TRAINING].SetLocked(false);
+    //                     GameRoot.Instance.TutorialSystem.StartTutorial(TutorialSystem.Tuto_5);
 
-                        GameRoot.Instance.TutorialSystem.OnActiveTutoEnd = () =>
-                        {
-                            NextAction();
-                        };
-                    });
-                });
-            });
-        }
-    }
+    //                     GameRoot.Instance.TutorialSystem.OnActiveTutoEnd = () =>
+    //                     {
+    //                         NextAction();
+    //                     };
+    //                 });
+    //             });
+    //         });
+    //     }
+    // }
 
-    private void CheckContentsOpen_Card(bool action)
-    {
-        if (!action) return;
+    // private void CheckContentsOpen_Card(bool action)
+    // {
+    //     if (!action) return;
 
-        GameObject target = HudBottomBtnList[(int)HudBottomBtnType.CARD].GetLockObj;
-        //card
-        if (!GameRoot.Instance.TutorialSystem.IsClearTuto(TutorialSystem.Tuto_6)
-            && GameRoot.Instance.ContentsOpenSystem.ContentsOpenCheck(ContentsOpenSystem.ContentsOpenType.CARDOPEN))
-        {
-            GameRoot.Instance.ActionQueueSystem.Append(() =>
-            {
-                HudBottomBtnList[(int)HudBottomBtnType.CARD].SetLocked(true);
-                GameRoot.Instance.UISystem.OpenUI<PopupContentsOpen>(popup =>
-                {
-                    popup.Set(ContentsOpenSystem.ContentsOpenType.CARDOPEN, target.transform as RectTransform, () =>
-                    {
-                        HudBottomBtnList[(int)HudBottomBtnType.CARD].SetLocked(false);
-                        GameRoot.Instance.TutorialSystem.StartTutorial(TutorialSystem.Tuto_6);
-                        GameRoot.Instance.UserData.SetReward((int)Config.RewardType.Currency , (int)Config.CurrencyID.Material , 20, false);
+    //     GameObject target = HudBottomBtnList[(int)HudBottomBtnType.CARD].GetLockObj;
+    //     //card
+    //     if (!GameRoot.Instance.TutorialSystem.IsClearTuto(TutorialSystem.Tuto_6)
+    //         && GameRoot.Instance.ContentsOpenSystem.ContentsOpenCheck(ContentsOpenSystem.ContentsOpenType.CARDOPEN))
+    //     {
+    //         GameRoot.Instance.ActionQueueSystem.Append(() =>
+    //         {
+    //             HudBottomBtnList[(int)HudBottomBtnType.CARD].SetLocked(true);
+    //             GameRoot.Instance.UISystem.OpenUI<PopupContentsOpen>(popup =>
+    //             {
+    //                 popup.Set(ContentsOpenSystem.ContentsOpenType.CARDOPEN, target.transform as RectTransform, () =>
+    //                 {
+    //                     HudBottomBtnList[(int)HudBottomBtnType.CARD].SetLocked(false);
+    //                     GameRoot.Instance.TutorialSystem.StartTutorial(TutorialSystem.Tuto_6);
+    //                     GameRoot.Instance.UserData.SetReward((int)Config.RewardType.Currency , (int)Config.CurrencyID.Material , 20, false);
 
-                        GameRoot.Instance.TutorialSystem.OnActiveTutoEnd = () =>
-                        {
-                            NextAction();
-                        };
-                    });
-                });
-            });
-        }
-    }
+    //                     GameRoot.Instance.TutorialSystem.OnActiveTutoEnd = () =>
+    //                     {
+    //                         NextAction();
+    //                     };
+    //                 });
+    //             });
+    //         });
+    //     }
+    // }
 
     // private void CheckContentsOpen_Pass(bool action)
     // {

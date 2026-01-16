@@ -58,8 +58,6 @@ public class PopupRevival : CommonUIBase
         Hide();
 
         GameRoot.Instance.UserData.AddRecordCount(Config.RecordCountKeys.FREEREVIVALCOUNT, 1);
-
-        GameRoot.Instance.InGameSystem.GetInGame<InGameBase>().Stage.PlayerBlockGroup.RevivalInvicible(RevivalTime);
     }
 
     public void RevivalFailed()

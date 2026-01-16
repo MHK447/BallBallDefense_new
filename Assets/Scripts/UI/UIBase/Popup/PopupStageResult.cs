@@ -146,42 +146,7 @@ public class PopupStageResult : CommonUIBase
 
     public void SetCurrencyValue()
     {
-        int coinrewardvalue = GameRoot.Instance.StageRewardSystem.GetStageRewardMoney(GameRoot.Instance.UserData.Stageidx.Value, IsSuccess);
 
-        CoinAmount = coinrewardvalue;
-        MaterialAmount = GameRoot.Instance.StageRewardSystem.GetStageRewardMaterial(GameRoot.Instance.UserData.Stageidx.Value, IsSuccess);
-
-        CoinAdAmount = IsFree ? coinrewardvalue : coinrewardvalue * 3;
-        MaterialAdAmount = IsFree ? MaterialAmount : MaterialAmount * 3;
-
-
-        if (!IsSuccess && GameRoot.Instance.ContentsOpenSystem.ContentsOpenCheck(ContentsOpenSystem.ContentsOpenType.TRAININGOPEN))
-        {
-            CoinAdAmount += 150;
-            MaterialAdAmount += 30;
-
-            if (CoinAdAmount > 300)
-            {
-                CoinAdAmount = 300;
-            }
-
-            if (MaterialAdAmount > 60)
-            {
-                MaterialAdAmount = 60;
-            }
-        }
-
-        if (!IsSuccess && GameRoot.Instance.ContentsOpenSystem.ContentsOpenCheck(ContentsOpenSystem.ContentsOpenType.TRAININGOPEN)
-        && GameRoot.Instance.UserData.Waveidx.Value > 3 && CoinAmount < 50)
-        {
-            CoinAmount += 50;
-            MaterialAmount += 10;
-        }
-
-        if (!GameRoot.Instance.ContentsOpenSystem.ContentsOpenCheck(ContentsOpenSystem.ContentsOpenType.CARDOPEN))
-        {
-            MaterialAdAmount = MaterialAmount = 0;
-        }
     }
 
 

@@ -21,7 +21,7 @@ public class InGameUpgrade_LightningStatue : InGameUpgrade
 
     public override void Apply()
     {
-        var playergroup = GameRoot.Instance.InGameSystem.GetInGame<InGameBase>().Stage.PlayerUnitGroup;
+        //var playergroup = GameRoot.Instance.InGameSystem.GetInGame<InGameBase>().Stage.PlayerUnitGroup;
 
         var getlevel = GameRoot.Instance.InGameUpgradeSystem.GetUpgradeLevel(upgradeChoiceIndex);
 

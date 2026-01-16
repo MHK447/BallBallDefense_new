@@ -4,35 +4,33 @@ using System.Collections.Generic;
 using System.Collections;
 using System.IO.Compression;
 using System.Linq;
+using UnityEngine.AddressableAssets;
 
 public partial class InGameBaseStage : MonoBehaviour
 {
-    public PlayerBlockGroup PlayerBlockGroup;
-
-    public EnemyUnitGroup EnemyUnitGroup;
-
-    public PlayerUnitGroup PlayerUnitGroup;
 
     private Coroutine currentWaveCoroutine = null;
 
     // 웨이브가 완전히 끝났는지 확인 (스폰이 모두 완료되었는지)
     public bool IsWaveSpawnComplete { get { return currentWaveCoroutine == null; } }
 
+    public EnemyUnitGroup EnemyUnitGroup;
+
+    [HideInInspector]
+    public PlayerUnit PlayerUnit;
+
+    [SerializeField]
+    private Transform PlayerUnitSpawnRoot;
 
 
     public void InitStage()
     {
-        PlayerBlockGroup.Init();
-        EnemyUnitGroup.Init();
-        PlayerUnitGroup.Init();
-
         EquipTutorialCheck();
-
-        EnemyUnitGroup.CheckEnemyBlockSpawner();
     }
 
     public void StartBattle()
     {
+
         GameRoot.Instance.UserData.Waveidx.Value = 1;
         GameRoot.Instance.UserData.Ingamesilvercoin.Value = 0;
         GameRoot.Instance.UserData.Playerdata.InGameExpProperty.Value = 0;
@@ -57,6 +55,8 @@ public partial class InGameBaseStage : MonoBehaviour
 
         InitStage();
 
+        SetPlayerUnit(1);
+
     }
 
 
@@ -71,12 +71,24 @@ public partial class InGameBaseStage : MonoBehaviour
 
     }
 
+    public void SetPlayerUnit(int playerunitidx)
+    {
+        if (PlayerUnit != null)
+        {
+            Destroy(PlayerUnit.gameObject);
+        }
+
+        var handle = Addressables.InstantiateAsync("PlayerUnit_Base", transform);
+        var result = handle.WaitForCompletion();
+        PlayerUnit = result.GetComponent<PlayerUnit>();
+        PlayerUnit.Set(playerunitidx);
+
+        PlayerUnit.transform.position = PlayerUnitSpawnRoot.position;
+    }
+
     public void StageClear()
     {
         GameRoot.Instance.UserData.Playerdata.StageClear();
-        PlayerUnitGroup.ClearData();
-        EnemyUnitGroup.ClearData();
-        PlayerBlockGroup.ClearData();
         GameRoot.Instance.UserData.InGamePlayerData.IsGameStartProperty.Value = false;
         GameRoot.Instance.UserData.Ingamesilvercoin.Value = 0;
         GameRoot.Instance.AlimentSystem.Clear();
@@ -87,10 +99,10 @@ public partial class InGameBaseStage : MonoBehaviour
 
         // PopupInGame의 TileWeaponGroup 초기화
         var popupInGame = GameRoot.Instance.UISystem.GetUI<PopupInGame>();
-        if (popupInGame != null && popupInGame.TileWeaponGroup != null)
-        {
-            popupInGame.TileWeaponGroup.ClearData();
-        }
+        // if (popupInGame != null && popupInGame.TileWeaponGroup != null)
+        // {
+        //     popupInGame.TileWeaponGroup.ClearData();
+        // }
     }
 
     public bool GameFinishSequenceStarted = false;
@@ -108,7 +120,7 @@ public partial class InGameBaseStage : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         //not really dead
-        if (this != null && PlayerBlockGroup != null)
+        if (this != null)
         {
             GameFinishSequenceStarted = false;
             yield break;
@@ -204,8 +216,6 @@ public partial class InGameBaseStage : MonoBehaviour
             currentWaveCoroutine = null;
         }
 
-        EnemyUnitGroup.ClearData();
-
         // 웨이브 중지 시 휴식 상태로 전환하여 TileWeaponComponent 드래그 가능하도록 설정
     }
 
@@ -218,19 +228,15 @@ public partial class InGameBaseStage : MonoBehaviour
             return;
         }
 
-        currentWaveCoroutine = StartCoroutine(StartWaveCoroutine());
+
     }
 
     public void StartRest()
     {
         GameRoot.Instance.UserData.InGamePlayerData.IsWaveRestProperty.Value = true;
-        PlayerUnitGroup.IsWinAnimationPlaying = false;
-
         GameRoot.Instance.UserData.Waveidx.Value += 1;
 
         SoundPlayer.Instance.PlaySound("sfx_wave_win");
-
-        EnemyUnitGroup.CheckEnemyBlockSpawner();
 
 
         //리롤 튜토리얼 체크
@@ -259,107 +265,14 @@ public partial class InGameBaseStage : MonoBehaviour
         else
         {
             var popupInGame = GameRoot.Instance.UISystem.GetUI<PopupInGame>();
-            if (popupInGame != null && popupInGame.TileWeaponGroup != null)
-            {
-                popupInGame.TileWeaponGroup.StartRandSelectBagAd();
-                popupInGame.TileWeaponGroup.SetStartBattleWeapon();
+            // if (popupInGame != null && popupInGame.TileWeaponGroup != null)
+            // {
+            //     popupInGame.TileWeaponGroup.StartRandSelectBagAd();
+            //     popupInGame.TileWeaponGroup.SetStartBattleWeapon();
 
-                GameRoot.Instance.UISystem.GetUI<PopupInGame>()?.TileWeaponGroup.StartRandSelectBag();
-            }
+            //     GameRoot.Instance.UISystem.GetUI<PopupInGame>()?.TileWeaponGroup.StartRandSelectBag();
+            // }
         }
-    }
-
-    private IEnumerator StartWaveCoroutine()
-    {
-        var stageidx = GameRoot.Instance.UserData.Stageidx.Value;
-
-        var Waveidx = GameRoot.Instance.UserData.Waveidx.Value;
-
-        var td = Tables.Instance.GetTable<WaveInfo>().GetData(new KeyValuePair<int, int>(stageidx, Waveidx));
-
-        if (td != null)
-        {
-            int resultwave_silvercoin = td.add_silver_coin;
-            int resultwave_exp = td.add_exp_value;
-
-            // 전체 적의 수 계산
-            int totalEnemyCount = 0;
-            for (int i = 0; i < td.unit_idx.Count; i++)
-            {
-                totalEnemyCount += td.unit_count[i];
-            }
-
-
-            int baseExpPerEnemy = totalEnemyCount > 0 ? resultwave_exp / totalEnemyCount : 0;
-            int remainingExp = totalEnemyCount > 0 ? resultwave_exp % totalEnemyCount : 0;
-
-            int enemyIndex = 0; // 적 생성 순서 추적
-
-            for (int i = 0; i < td.unit_idx.Count; i++)
-            {
-                // 첫 번째 유닛 타입 스폰 전에도 unit_appear_time 적용
-                if (i == 0 && td.unit_appear_time != null && i < td.unit_appear_time.Count)
-                {
-                    float waitTime = td.unit_appear_time[i] / 100f;
-                    yield return new WaitForSeconds(waitTime);
-
-                    // 대기 후 게임 포기 체크
-                    if (!GameRoot.Instance.UserData.InGamePlayerData.IsGameStartProperty.Value)
-                    {
-                        currentWaveCoroutine = null;
-                        yield break;
-                    }
-                }
-
-                for (int j = 0; j < td.unit_count[i]; j++)
-                {
-                    // 게임 포기 체크
-                    if (!GameRoot.Instance.UserData.InGamePlayerData.IsGameStartProperty.Value)
-                    {
-                        currentWaveCoroutine = null;
-                        yield break;
-                    }
-
-
-
-                    int expForThisEnemy = baseExpPerEnemy;
-                    if (enemyIndex < remainingExp)
-                    {
-                        expForThisEnemy += 1;
-                    }
-
-                    // WaveInfo에서 unit_dmg, unit_hp 가져오기
-                    int unitDmg = (td.unit_dmg != null && i < td.unit_dmg.Count) ? td.unit_dmg[i] : td.unit_dmg.Last();
-                    int unitHp = (td.unit_hp != null && i < td.unit_hp.Count) ? td.unit_hp[i] : td.unit_hp.Last();
-
-
-                    EnemyUnitGroup.AddUnit(td.unit_idx[i], expForThisEnemy, unitDmg, unitHp);
-
-                    enemyIndex++;
-                }
-
-                // unit_appear_time을 백분율로 적용 (100으로 나누어 초 단위로 변환)
-                // 마지막 유닛 타입이 아닐 때만 대기 (마지막 유닛 타입 생성 후에는 바로 스폰 완료 처리)
-                bool isLastUnitType = (i == td.unit_idx.Count - 1);
-                if (!isLastUnitType && td.unit_appear_time != null && i < td.unit_appear_time.Count)
-                {
-                    float waitTime = td.unit_appear_time[i] / 100f;
-                    yield return new WaitForSeconds(waitTime);
-
-                    // 대기 후 다시 게임 포기 체크
-                    if (!GameRoot.Instance.UserData.InGamePlayerData.IsGameStartProperty.Value)
-                    {
-                        currentWaveCoroutine = null;
-                        yield break;
-                    }
-                }
-            }
-        }
-
-        currentWaveCoroutine = null;
-
-        // 웨이브 스폰이 완료되었을 때, 적이 이미 모두 죽었는지 체크
-        EnemyUnitGroup.CheckAndStartRestIfAllDead();
     }
 
 

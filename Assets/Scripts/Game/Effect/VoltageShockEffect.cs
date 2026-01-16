@@ -35,11 +35,11 @@ public class VoltageShockEffect : Effect
                 // Enemy 레이어인 경우
                 if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                 {
-                    var enemy = hitCollider.GetComponent<EnemyUnit>();
-                    if (enemy != null && !enemy.IsDead)
-                    {
-                        enemy.Damage(Damage);
-                    }
+                    // var enemy = hitCollider.GetComponent<EnemyUnit>();
+                    // if (enemy != null && !enemy.IsDead)
+                    // {
+                    //     enemy.Damage(Damage);
+                    // }
                 }
             }
             else if (UnitType == Config.UnitType.Player)
@@ -47,11 +47,11 @@ public class VoltageShockEffect : Effect
                 // Player 레이어인 경우
                 if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    var player = hitCollider.GetComponent<PlayerUnit>();
-                    if (player != null && !player.IsDead)
-                    {
-                        player.Damage(Damage);
-                    }
+                    // var player = hitCollider.GetComponent<PlayerUnit>();
+                    // if (player != null && !player.IsDead)
+                    // {
+                    //     player.Damage(Damage);
+                    // }
                 }
             }
         }

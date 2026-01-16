@@ -168,66 +168,6 @@ public class CheatWindow : MonoBehaviour
         GameRoot.Instance.UISystem.OpenUI<PopupLevelUpReward>(popup => popup.Init(true));
     }
 
-    public void AddTileWeapon()
-    {
-        if (string.IsNullOrEmpty(inputField.text))
-        {
-            BpLog.LogError("input field empty!");
-            return;
-        }
-
-        string[] parts = inputField.text.Split(';');
-        if (parts.Length != 2)
-        {
-            BpLog.LogError("input format should be 'tileId;quantity' (e.g., 1;1)");
-            return;
-        }
-
-        int tileId;
-        if (!int.TryParse(parts[0], out tileId))
-        {
-            BpLog.LogError("tile id is not a valid number!");
-            return;
-        }
-
-        int quantity;
-        if (!int.TryParse(parts[1], out quantity))
-        {
-            BpLog.LogError("quantity is not a valid number!");
-            return;
-        }
-        var td = Tables.Instance.GetTable<EquipInfo>().GetData(tileId);
-        if (td != null)
-        {
-            if (td.item_type == 3)
-            {
-                GameRoot.Instance.UISystem.GetUI<PopupInGame>()?.TileWeaponGroup.AddPlusTile(tileId);
-            }
-        }
-        else
-        {
-            GameRoot.Instance.UISystem.GetUI<PopupInGame>()?.TileWeaponGroup.AddTileWeapon(tileId, quantity);
-        }
-    }
-
-
-    public void AllAddTileWeapon()
-    {
-        var tdlist = Tables.Instance.GetTable<EquipInfo>().DataList.ToList();
-
-        foreach (var td in tdlist)
-        {
-            if (td.item_type == 3)
-            {
-                GameRoot.Instance.UISystem.GetUI<PopupInGame>()?.TileWeaponGroup.AddPlusTile(td.idx);
-            }
-            else
-            {
-                GameRoot.Instance.UISystem.GetUI<PopupInGame>()?.TileWeaponGroup.AddTileWeapon(td.idx, 1);
-            }
-        }
-    }
-
     public void OnClick_Hide()
     {
         GameRoot.Instance.SetCheatWindow(false);

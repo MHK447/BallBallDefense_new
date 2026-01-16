@@ -10,7 +10,7 @@ public class AlimentData
 
     public float Time = 0f;
 
-    public EnemyUnit Target = null;
+    // public EnemyUnit Target = null;
 
     public double Damage = 0f;
     public float DamageDelay = 0f;
@@ -21,17 +21,17 @@ public class AlimentData
     protected float deltatime = 0f;
 
 
-    public virtual void Set(AlimentType type, float time, EnemyUnit target, double damage, float damagedelay, int maxStackCount = 1)
-    {
-        this.Type = type;
-        this.Time = time;
-        this.Target = target;
-        this.Damage = damage;
-        this.DamageDelay = damagedelay;
-        this.MaxStackCount = maxStackCount;
+    // public virtual void Set(AlimentType type, float time, EnemyUnit target, double damage, float damagedelay, int maxStackCount = 1)
+    // {
+    //     this.Type = type;
+    //     this.Time = time;
+    //     this.Target = target;
+    //     this.Damage = damage;
+    //     this.DamageDelay = damagedelay;
+    //     this.MaxStackCount = maxStackCount;
 
-        deltatime = 0f;
-    }
+    //     deltatime = 0f;
+    // }
 
 
     public virtual void Update()
@@ -43,34 +43,34 @@ public class AlimentData
         {
             Time -= DamageDelay;
             deltatime = 0f;
-            OnDamage();
+            //OnDamage();
         }
     }
 
 
-    public virtual void OnDamage()
-    {
-        if (Target == null) return;
+    // public virtual void OnDamage()
+    // {
+    //     if (Target == null) return;
 
 
-        Effect();
-    }
+    //     Effect();
+    // }
 
-    public void Effect()
-    {
-        if (Target == null) return;
+    // public void Effect()
+    // {
+    //     if (Target == null) return;
 
-        switch (Type)
-        {
-            case AlimentType.Poison:
-                {
-                    GameRoot.Instance.EffectSystem.MultiPlay<PoisonEffect>(Target.transform.position, (x) =>
-                    {
-                        x.SetAutoRemove(true, 1.5f);
-                    });
-                    break;
-                }
-        }
-    }
+    //     switch (Type)
+    //     {
+    //         case AlimentType.Poison:
+    //             {
+    //                 GameRoot.Instance.EffectSystem.MultiPlay<PoisonEffect>(Target.transform.position, (x) =>
+    //                 {
+    //                     x.SetAutoRemove(true, 1.5f);
+    //                 });
+    //                 break;
+    //             }
+    //     }
+    // }
 
 }

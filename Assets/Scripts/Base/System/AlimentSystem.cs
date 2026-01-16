@@ -24,64 +24,64 @@ public class AlimentSystem
     }
 
 
-    public void AddAliment(AlimentType type, float time, EnemyUnit target, double damage, float damagedelay = 1f, int maxStackCount = 1)
-    {
-        AlimentData data = null;
+    // public void AddAliment(AlimentType type, float time, EnemyUnit target, double damage, float damagedelay = 1f, int maxStackCount = 1)
+    // {
+    //     AlimentData data = null;
 
-        var finddata = AlimentList.Find(x => x.Target == target && x.Type == type && x.Time > 0f);
+    //     var finddata = AlimentList.Find(x => x.Target == target && x.Type == type && x.Time > 0f);
 
-        if (finddata == null)
-        {
-            switch (type)
-            {
-                case AlimentType.Freeze:
-                    {
-                        data = new Freeze_Aliment();
-                        AlimentList.Add(data);
-                        break;
-                    }
-                case AlimentType.Poison:
-                    {
-                        data = new Poison_Aliment();
-                        AlimentList.Add(data);
-                        break;
-                    }
+    //     if (finddata == null)
+    //     {
+    //         switch (type)
+    //         {
+    //             case AlimentType.Freeze:
+    //                 {
+    //                     data = new Freeze_Aliment();
+    //                     AlimentList.Add(data);
+    //                     break;
+    //                 }
+    //             case AlimentType.Poison:
+    //                 {
+    //                     data = new Poison_Aliment();
+    //                     AlimentList.Add(data);
+    //                     break;
+    //                 }
 
-            }
-            data.Set(type, time, target, damage, damagedelay, maxStackCount);
-        }
-        else
-        {
-            finddata.Time = time;
-            finddata.Damage = damage;
-            // 중첩 카운트 증가 (최대치까지만)
-            if (finddata.StackCount < finddata.MaxStackCount)
-            {
-                finddata.StackCount++;
-            }
-        }
-    }
+    //         }
+    //         data.Set(type, time, target, damage, damagedelay, maxStackCount);
+    //     }
+    //     else
+    //     {
+    //         finddata.Time = time;
+    //         finddata.Damage = damage;
+    //         // 중첩 카운트 증가 (최대치까지만)
+    //         if (finddata.StackCount < finddata.MaxStackCount)
+    //         {
+    //             finddata.StackCount++;
+    //         }
+    //     }
+    // }
 
-    public void RemoveAliment(AlimentType type, EnemyUnit target)
-    {
-        var finddata = AlimentList.Find(x => x.Target == target && x.Type == type && x.Time > 0f);
+    // public void RemoveAliment(AlimentType type, EnemyUnit target)
+    // {
+    //     var finddata = AlimentList.Find(x => x.Target == target && x.Type == type && x.Time > 0f);
 
-        if (finddata != null)
-        {
-            AlimentList.Remove(finddata);
-        }
-    }
+    //     if (finddata != null)
+    //     {
+    //         AlimentList.Remove(finddata);
+    //     }
+    // }
 
 
-    public void Update()
-    {
-        if (AlimentList.Count == 0) return;
-        if (!GameRoot.Instance.UserData.InGamePlayerData.IsGameStartProperty.Value) return;
+    // public void Update()
+    // {
+    //     if (AlimentList.Count == 0) return;
+    //     if (!GameRoot.Instance.UserData.InGamePlayerData.IsGameStartProperty.Value) return;
 
-        for (int i = AlimentList.Count - 1; i >= 0; i--)
-        {
-            AlimentList[i].Update();
-        }
+    //     for (int i = AlimentList.Count - 1; i >= 0; i--)
+    //     {
+    //         AlimentList[i].Update();
+    //     }
 
-    }
+    // }
 }

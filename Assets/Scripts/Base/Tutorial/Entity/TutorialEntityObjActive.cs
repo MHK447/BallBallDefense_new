@@ -41,22 +41,22 @@ public class TutorialEntityObjActive : TutorialEntity
 
         switch (id)
         {
-            case TutorialIdent.InGameRerollBtn:
-                {
-                    target = GameRoot.Instance.UISystem.GetUI<PopupInGame>().GetBtnGroup.GetRerollBtn.gameObject;
-                }
-                break;
+            // case TutorialIdent.InGameRerollBtn:
+            //     {
+            //         target = GameRoot.Instance.UISystem.GetUI<PopupInGame>().GetBtnGroup.GetRerollBtn.gameObject;
+            //     }
+            //     break;
 
-            case TutorialIdent.InGameStartBtn:
-                {
-                    target = GameRoot.Instance.UISystem.GetUI<PopupInGame>().GetBtnGroup.GetBattleBtn.gameObject;
-                }
-                break;
-            case TutorialIdent.SlotAddMoneyRoot:
-                {
-                    target = GameRoot.Instance.UISystem.GetUI<PopupInGame>().GetBtnGroup.GetSlotAddMoneyRoot.gameObject;
-                }
-                break;
+            // case TutorialIdent.InGameStartBtn:
+            //     {
+            //         target = GameRoot.Instance.UISystem.GetUI<PopupInGame>().GetBtnGroup.GetBattleBtn.gameObject;
+            //     }
+            //     break;
+            // case TutorialIdent.SlotAddMoneyRoot:
+            //     {
+            //         target = GameRoot.Instance.UISystem.GetUI<PopupInGame>().GetBtnGroup.GetSlotAddMoneyRoot.gameObject;
+            //     }
+            //     break;
         }
         Done();
     }

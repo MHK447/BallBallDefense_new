@@ -156,7 +156,7 @@ public class GameRoot : Singleton<GameRoot>
 
 		UserData.Update();
 		PlayTimeSystem.Update();
-		AlimentSystem.Update();
+		//AlimentSystem.Update();
 
 		if (deltaTime >= 1f) // one seconds updates;
 		{

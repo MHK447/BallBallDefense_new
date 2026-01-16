@@ -8,20 +8,6 @@ using System.Linq;
 public enum TutorialIdent
 {
     None,
-    InGameRerollBtn,
-    RewardLobbyBtn,
-    LobbyTrainingBtn,
-    TrainingUpgradeBtn,
-    LobbyCardOpenBtn,
-    InGameStartBtn,
-    FirstMainRewardBtn,
-    SlotAddBtn,
-    SlotAddMoneyRoot,
-    TrainingGachaBtn,
-    CardGachaBtn,
-    CardGachaCloseBtn,
-    LobbyCardSelectBtn,
-    LobbyCardUpgradeBtn,
 }
 
 public class TutorialSystem

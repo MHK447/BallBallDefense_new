@@ -21,7 +21,7 @@ public class InGameUpgrade_SnailSlime : InGameUpgrade
 
     public override void Apply()
     {
-        var playergroup = GameRoot.Instance.InGameSystem.GetInGame<InGameBase>().Stage.PlayerUnitGroup;
+        //var playergroup = GameRoot.Instance.InGameSystem.GetInGame<InGameBase>().Stage.PlayerUnitGroup;
 
         var td = Tables.Instance.GetTable<InGameUpgradeChoice>().GetData((int)upgradeChoiceIndex);
 

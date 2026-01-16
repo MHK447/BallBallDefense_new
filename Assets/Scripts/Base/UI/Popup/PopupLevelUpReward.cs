@@ -139,12 +139,7 @@ public class PopupLevelUpReward : UIBase
             GameRoot.Instance.GameSpeedSystem.StopGameSpeed(false, false);
         }
 
-        // 파티클 효과를 비동기로 처리하여 팝업 닫힘을 지연시키지 않음
-        if (GameRoot.Instance.InGameSystem?.GetInGame<InGameBase>()?.Stage?.PlayerBlockGroup != null)
-        {
-            GameRoot.Instance.InGameSystem.GetInGame<InGameBase>().Stage.PlayerBlockGroup.ShowStatUpgradeParticle();
-        }
-
+       
         IsReroll = false;
         UpgradeLock = false;
 

@@ -11,10 +11,7 @@ public class RewardEffect : Effect
     [SerializeField]
     private List<Image> RewardImages = new List<Image>();
 
-    [SerializeField]
-    private List<TrailComponent> TrailComponents = new List<TrailComponent>();
-
-
+  
 
     public void Set(int rewardtype , int rewardidx , Transform endrewardtr , System.Action endaction = null)
     {

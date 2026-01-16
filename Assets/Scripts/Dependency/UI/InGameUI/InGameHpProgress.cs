@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using BanpoFri;
+using TMPro;
 
 [FloatUIPath("UI/InGame/InGameHpProgress")]
 [FloatingDepth((int)Config.FloatingUIDepth.HpProgress)]
@@ -14,6 +15,9 @@ public class InGameHpProgress : InGameFloatingUI
 
     [SerializeField]
     private Slider DelayHealthBar;
+
+    [SerializeField]
+    private TextMeshProUGUI HpText;
 
     public float updatespeed = 1f;
 
@@ -51,12 +55,19 @@ public class InGameHpProgress : InGameFloatingUI
             GameRoot.Instance.StopCoroutine(Col);
 
         Col = GameRoot.Instance.StartCoroutine(UpdateDelayedHealthBar(curhpvalue));
+
+        HpText.text = curhp.ToString();
     }
 
     private void OnDisable()
     {
         if (Col != null)
             GameRoot.Instance.StopCoroutine(Col);
+    }
+
+    public void SetHpText(double hp)
+    {
+        HpText.text = hp.ToString();
     }
 
 
@@ -73,5 +84,8 @@ public class InGameHpProgress : InGameFloatingUI
         }
 
         HpSlider.value = (float)hp;
+
+
+        HpText.text = hp.ToString();
     }
 }
