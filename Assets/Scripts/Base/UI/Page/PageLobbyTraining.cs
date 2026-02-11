@@ -82,7 +82,7 @@ public class PageLobbyTraining : CommonUIBase
         ToastAnimator.gameObject.SetActive(false);
         ProjectUtility.SetActiveCheck(ToolTip.gameObject, false);
 
-        NextBuyOrder = GameRoot.Instance.UserData.Newtrainingdatabuyorder.Value + 1;
+        NextBuyOrder = GameRoot.Instance.UserData.InGamePlayerData.InGameUpgradeCountProperty.Value + 1;
         NextBuyData = Tables.Instance.GetTable<BlockTrainingInfo>().GetData(NextBuyOrder);
         SetButtons();
         SetTexts();
@@ -112,7 +112,7 @@ public class PageLobbyTraining : CommonUIBase
 
     private void Buy()
     {
-        if (NextBuyData.level > GameRoot.Instance.UserData.Playerdata.Playerlevel) return;
+        if (NextBuyData.level > GameRoot.Instance.UserData.InGamePlayerData.Playerlevel) return;
         if (GameRoot.Instance.UserData.Money.Value >= NextBuyData.cost)
         {
             GameRoot.Instance.UserData.SetReward((int)Config.RewardType.Currency, (int)Config.CurrencyID.Money, -NextBuyData.cost, true);
@@ -132,7 +132,7 @@ public class PageLobbyTraining : CommonUIBase
     private bool CanBuyWithAd()
     {
         if (AdWatchCount >= 1) return false;
-        if (NextBuyData.level > GameRoot.Instance.UserData.Playerdata.Playerlevel) return false;
+        if (NextBuyData.level > GameRoot.Instance.UserData.InGamePlayerData.Playerlevel) return false;
         return true;
     }
 
@@ -184,7 +184,7 @@ public class PageLobbyTraining : CommonUIBase
         PriceText.color = GameRoot.Instance.UserData.Money.Value < NextBuyData.cost ? Color.red : Color.white;
 
         //turn off
-        bool canBuyNext = NextBuyData.level <= GameRoot.Instance.UserData.Playerdata.Playerlevel;
+        bool canBuyNext = NextBuyData.level <= GameRoot.Instance.UserData.InGamePlayerData.Playerlevel;
         AdBtn.interactable = canBuyNext;
         BuyBtn.interactable = canBuyNext;
         ProjectUtility.SetActiveCheck(BtnAreaRoot, canBuyNext);

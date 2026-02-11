@@ -48,7 +48,6 @@ table UserData {
 
   // @AutoCreate
   material:int = 0; // @ReactiveProperty
-  playerdata:PlayerData;
   newtrainingdatabuyorder:int = 0; //@ReactiveProperty
   carddatas:[CardData];
   ingamesilvercoin:int = 0; // @ReactiveProperty

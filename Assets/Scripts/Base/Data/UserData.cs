@@ -174,7 +174,6 @@ public partial class UserDataSystem
         /* 아래 @주석 위치를 찾아서 함수가 자동 추가됩니다 SaveFile 함수에서 SetSaveDatas를 호출해주세요 */
         // @자동 저장 데이터 함수들
         SaveData_CardData(builder);
-        SaveData_PlayerData(builder);
         SaveData_StageRewardBoxGroupData(builder);
         SaveData_TrainingGroupData(builder);
         SaveData_UnitGroupData(builder);

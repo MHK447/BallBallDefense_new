@@ -85,7 +85,7 @@ public class PlayerUnitWeapon : MonoBehaviour
                 EnemyFindTarget();
             }
 
-            if (TargetEnemy != null && PlayerUnit.PlayerUnitInfoData.InBaseBallCount.Value > 0)
+            if (PlayerUnit.PlayerUnitInfoData.InBaseBallCount.Value > 0 && TargetEnemy != null)
             {
                 FireBullet();
                 PlayerUnit.PlayerUnitInfoData.InBaseBallCount.Value -= 1;
@@ -117,13 +117,13 @@ public class PlayerUnitWeapon : MonoBehaviour
 
     void Update()
     {
-        if (TargetEnemy != null)
+        // 수동 조작 중이 아닐 때만 자동으로 적을 바라봄
+        if (TargetEnemy != null && !WeaponDirectionController.isManualControl)
         {
-            transform.position = TargetEnemy.transform.position;
-
+    
             // WeaponImg가 TargetEnemy를 바라보게 함
             Vector3 direction = TargetEnemy.transform.position - WeaponImg.transform.position;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
             WeaponImg.transform.rotation = Quaternion.Euler(0, 0, angle);
         }
     }
@@ -133,14 +133,16 @@ public class PlayerUnitWeapon : MonoBehaviour
     {
         if (PlayerUnit.IsDead) return;
 
-        if (TargetEnemy == null) return;
-
+        if(TargetEnemy == null) return;
 
         PlayerBulletBase instance = BulletPool.Get();
         if (instance == null) return;
 
         instance.transform.position = BulletFireTr.transform.position;
-        instance.Set(TargetEnemy, PlayerUnit, OnBulletHit);
+        
+        // WeaponImg의 회전 방향으로 발사 (WeaponImg의 up 방향)
+        Vector3 fireDirection = WeaponImg.transform.up;
+        instance.Set(fireDirection, PlayerUnit, OnBulletHit);
     }
 
     protected virtual void OnBulletHit(PlayerBulletBase bullet)

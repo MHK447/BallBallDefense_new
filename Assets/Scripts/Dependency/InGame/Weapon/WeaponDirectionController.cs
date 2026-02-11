@@ -28,7 +28,7 @@ public class WeaponDirectionController : MonoBehaviour
     [SerializeField]
     private float maxRotationZ = 55f;
 
-    private bool isManualControl = false;
+    public bool isManualControl = false;
     private PanAndZoom Cam;
 
     public void Init()

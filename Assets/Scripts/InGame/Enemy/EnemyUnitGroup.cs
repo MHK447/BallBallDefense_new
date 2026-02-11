@@ -33,9 +33,8 @@ public class EnemyUnitGroup : MonoBehaviour
             var handle = Addressables.InstantiateAsync("EnemyUnit_Base", transform);
             var result = handle.WaitForCompletion();
             instance = result.GetComponent<EnemyUnit>();
-            instance.Set(enemyidx, order, hp);
-
             instance.transform.position = EnemySpawnTrList[order].position;
+            instance.Set(enemyidx, order, hp);
             ActiveUnits.Add(instance);
         }
 

@@ -31,14 +31,12 @@ public partial class InGameBaseStage : MonoBehaviour
     public void StartBattle()
     {
 
-        GameRoot.Instance.UserData.Waveidx.Value = 1;
+        GameRoot.Instance.UserData.Waveidx.Value = 0;
         GameRoot.Instance.UserData.Ingamesilvercoin.Value = 0;
-        GameRoot.Instance.UserData.Playerdata.InGameExpProperty.Value = 0;
         GameRoot.Instance.UserData.InGamePlayerData.KillCountProperty.Value = 0;
         SoundPlayer.Instance.SetBGMVolume(0f);
         GameRoot.Instance.UISystem.GetUI<HUDTotal>()?.Hide();
         GameRoot.Instance.UserData.InGamePlayerData.IsGameStartProperty.Value = true;
-        GameRoot.Instance.UserData.InGamePlayerData.IsWaveRestProperty.Value = true;
 
         var trainingvalue = GameRoot.Instance.TrainingSystem.GetBuffValue(TrainingSystem.TrainingType.CastleHpIncrease);
 
@@ -50,20 +48,22 @@ public partial class InGameBaseStage : MonoBehaviour
         {
             x.Init();
         });
-
-        GameRoot.Instance.UserData.Waveidx.Value = 1;
-
+        
         InitStage();
 
         SetPlayerUnit(1);
+
+        StartNextWaveCheck();
+
+
 
     }
 
 
     public void SetHp(int hp)
     {
-        GameRoot.Instance.UserData.Playerdata.StartHpProperty.Value = hp;
-        GameRoot.Instance.UserData.Playerdata.CurHpProperty.Value = hp;
+        GameRoot.Instance.UserData.InGamePlayerData.StartHpProperty.Value = hp;
+        GameRoot.Instance.UserData.InGamePlayerData.CurHpProperty.Value = hp;
     }
 
     public void TutorialCheck()
@@ -88,7 +88,7 @@ public partial class InGameBaseStage : MonoBehaviour
 
     public void StageClear()
     {
-        GameRoot.Instance.UserData.Playerdata.StageClear();
+        GameRoot.Instance.UserData.InGamePlayerData.StageClear();
         GameRoot.Instance.UserData.InGamePlayerData.IsGameStartProperty.Value = false;
         GameRoot.Instance.UserData.Ingamesilvercoin.Value = 0;
         GameRoot.Instance.AlimentSystem.Clear();
@@ -228,30 +228,14 @@ public partial class InGameBaseStage : MonoBehaviour
             return;
         }
 
+        currentWaveCoroutine = StartCoroutine(StartWaveCoroutine());
 
     }
 
-    public void StartRest()
+    public void StartNextWaveCheck()
     {
-        GameRoot.Instance.UserData.InGamePlayerData.IsWaveRestProperty.Value = true;
         GameRoot.Instance.UserData.Waveidx.Value += 1;
 
-        SoundPlayer.Instance.PlaySound("sfx_wave_win");
-
-
-        //리롤 튜토리얼 체크
-        if (GameRoot.Instance.UserData.Waveidx.Value == 2 && GameRoot.Instance.UserData.Stageidx.Value == 1)
-        {
-            if (GameRoot.Instance.UserData.Tutorial.Contains(TutorialSystem.Tuto_1))
-            {
-                GameRoot.Instance.UserData.Tutorial.Remove(TutorialSystem.Tuto_1);
-            }
-
-            GameRoot.Instance.TutorialSystem.StartTutorial(TutorialSystem.Tuto_1);
-        }
-
-        // 웨이브 종료 시 쉴드 초기화
-        GameRoot.Instance.UserData.Playerdata.CurShiledProperty.Value = 0;
 
         var wavecount = Tables.Instance.GetTable<WaveInfo>().DataList.FindAll(x => x.stage == GameRoot.Instance.UserData.Stageidx.Value).Count;
 
@@ -264,17 +248,60 @@ public partial class InGameBaseStage : MonoBehaviour
         }
         else
         {
-            var popupInGame = GameRoot.Instance.UISystem.GetUI<PopupInGame>();
-            // if (popupInGame != null && popupInGame.TileWeaponGroup != null)
-            // {
-            //     popupInGame.TileWeaponGroup.StartRandSelectBagAd();
-            //     popupInGame.TileWeaponGroup.SetStartBattleWeapon();
-
-            //     GameRoot.Instance.UISystem.GetUI<PopupInGame>()?.TileWeaponGroup.StartRandSelectBag();
-            // }
+            StartWave();
         }
     }
 
 
+    private int StartWaveOrder = 1;
 
+    private IEnumerator StartWaveCoroutine()
+    {
+        var stageidx = GameRoot.Instance.UserData.Stageidx.Value;
+
+        var Waveidx = GameRoot.Instance.UserData.Waveidx.Value;
+
+        StartWaveOrder = 1;
+
+        var tdlists = Tables.Instance.GetTable<WaveInfo>().DataList.FindAll(x => x.stage == stageidx && x.wave == Waveidx);
+
+        foreach(var td in tdlists)
+        {
+            while(StartWaveOrder <= td.order)
+            {
+                for(int i = 0; i < td.unit_idx.Count; ++i)
+                {
+                    EnemyUnitGroup.AddEnemyUnit(td.unit_idx[i], i, td.unit_hp[i]);
+                }
+
+                StartWaveOrder++;
+
+                yield return new WaitForSeconds(td.unit_appear_time / 100);
+
+            }
+        }
+    }
+
+
+    private float oneseconddeltime = 0f;    
+
+    void Update()
+    {
+        if(!GameRoot.Instance.UserData.InGamePlayerData.IsGameStartProperty.Value) return;
+
+
+        oneseconddeltime += Time.deltaTime;
+
+        if(oneseconddeltime >= 1)
+        {
+            oneseconddeltime = 0f;
+            GameRoot.Instance.UserData.InGamePlayerData.WaveTimePorperty.Value += 1;
+
+            if(GameRoot.Instance.UserData.InGamePlayerData.WaveTimePorperty.Value >= 20)
+            {
+                GameRoot.Instance.UserData.InGamePlayerData.WaveTimePorperty.Value = 0;
+                StartNextWaveCheck();
+            }
+        }
+    }
 }

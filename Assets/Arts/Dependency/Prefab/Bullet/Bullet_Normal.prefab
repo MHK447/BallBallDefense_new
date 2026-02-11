@@ -18,11 +18,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3286227409527785881, guid: 0d88476a6ed744a5498736352ba6fe70, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.219
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3286227409527785881, guid: 0d88476a6ed744a5498736352ba6fe70, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.007
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5942847667605283105, guid: 0d88476a6ed744a5498736352ba6fe70, type: 3}
       propertyPath: m_LocalPosition.x
@@ -81,6 +81,10 @@ PrefabInstance:
       value: 0.010514304
       objectReference: {fileID: 0}
     - target: {fileID: 6837763811971400682, guid: 0d88476a6ed744a5498736352ba6fe70, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6837763811971400682, guid: 0d88476a6ed744a5498736352ba6fe70, type: 3}
       propertyPath: m_SpriteTilingProperty.pivot.x
       value: 0.5
       objectReference: {fileID: 0}
@@ -135,6 +139,14 @@ PrefabInstance:
     - target: {fileID: 8866957999704456151, guid: 0d88476a6ed744a5498736352ba6fe70, type: 3}
       propertyPath: m_IsTrigger
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9184753415598114530, guid: 0d88476a6ed744a5498736352ba6fe70, type: 3}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9184753415598114530, guid: 0d88476a6ed744a5498736352ba6fe70, type: 3}
+      propertyPath: m_GravityScale
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 9173591638087619807, guid: 0d88476a6ed744a5498736352ba6fe70, type: 3}
@@ -203,4 +215,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31eae74a6f9b847d58c9b2a00f8f2660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ColAction: {fileID: 8591008546634727535}
   TrailComponent: {fileID: 1991564565667346266}

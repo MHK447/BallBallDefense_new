@@ -88,13 +88,13 @@ public class LobbyTrainingComponent : MonoBehaviour
         var nextData = Tables.Instance.GetTable<BlockTrainingInfo>().GetData(trainingOrder + 1);
         isCap = false;
         isLevelChange = false;
-        bool isLevelOver = TrainingData.level > GameRoot.Instance.UserData.Playerdata.Playerlevel;
-        isClaimed = GameRoot.Instance.UserData.Newtrainingdatabuyorder.Value >= TrainingData.upgrade_order;
+        bool isLevelOver = TrainingData.level > GameRoot.Instance.UserData.InGamePlayerData.Playerlevel;
+        isClaimed = GameRoot.Instance.UserData.InGamePlayerData.InGameUpgradeCountProperty.Value >= TrainingData.upgrade_order;
         bool canUpgrade = trainingOrder - 1 == GameRoot.Instance.UserData.Newtrainingdatabuyorder.Value;
         canUpgrade &= TrainingData.cost <= GameRoot.Instance.UserData.Money.Value;
         canUpgrade &= !isLevelOver;
         if (nextData != null && nextData.level != TrainingData.level) isLevelChange = true;
-        if (isLevelChange && nextData.level > GameRoot.Instance.UserData.Playerdata.Playerlevel && !isLevelOver) isCap = true;
+        if (isLevelChange && nextData.level > GameRoot.Instance.UserData.InGamePlayerData.Playerlevel && !isLevelOver) isCap = true;
 
         //set basic info
         IconImg.sprite = AtlasManager.Instance.GetSprite(Atlas.Atlas_UI_Common, TrainingData.upgrade_icon);

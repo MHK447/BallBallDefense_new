@@ -12,14 +12,15 @@ public class EnemyUnit : MonoBehaviour
     {
         Dead,
         Move,
-        Sturn
+        Sturn,
+        Rush
     }
 
     protected InGameHpProgress InGameHpProgress;
 
 
     [HideInInspector]
-    public EnemyInfoData EnemyInfoData;
+    public EnemyInfoData EnemyInfoData = new EnemyInfoData();
 
     [SerializeField]
     private SpriteRenderer UnitImg;
@@ -45,7 +46,7 @@ public class EnemyUnit : MonoBehaviour
 
         EnemyInfoData.StartHp = hp;
         EnemyInfoData.CurHp = hp;
-        EnemyInfoData.MoveSpped = 2f;
+        EnemyInfoData.MoveSpped = 0.5f;
 
         BaseStage = GameRoot.Instance.InGameSystem.GetInGame<InGameBase>().Stage;
 
@@ -61,6 +62,12 @@ public class EnemyUnit : MonoBehaviour
         this.transform.DOScale(UnityEngine.Vector3.one, 0.3f).SetEase(Ease.OutBack);
 
         UnitImg.DisableHitEffect();
+    }
+
+
+    public void PlayerUnitDamage(int damage)
+    {
+        BaseStage.PlayerUnit.Damage(damage);
     }
 
 
@@ -94,9 +101,18 @@ public class EnemyUnit : MonoBehaviour
 
     public virtual void Damage(int damage)
     {
-
         GameRoot.Instance.DamageTextSystem.ShowDamage(damage,
         new UnityEngine.Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z), Color.white);
+
+        EnemyInfoData.CurHp -= damage;
+        InGameHpProgress?.SetHpText((int)EnemyInfoData.CurHp, EnemyInfoData.StartHp);
+
+       DamageColorEffect();
+
+        if (EnemyInfoData.CurHp <= 0)
+        {
+            Dead();
+        }
     }
 
 
@@ -128,11 +144,45 @@ public class EnemyUnit : MonoBehaviour
     {
         if (CurState != EnemyState.Move) return;
 
+        // 플레이어와의 y축 거리 체크
+        if (!IsRushing && BaseStage.PlayerUnit != null)
+        {
+            float yDistance = Mathf.Abs(transform.position.y - BaseStage.PlayerUnit.transform.position.y);
+            
+            if (yDistance <= 0.3f)
+            {
+                // 돌진 시작
+                RushToPlayer();
+                return;
+            }
+        }
+
         transform.position -= new UnityEngine.Vector3(0, EnemyInfoData.MoveSpped * Time.deltaTime, 0);
+    }
+
+    private void RushToPlayer()
+    {
+        IsRushing = true;
+        SetState(EnemyState.Rush);
+
+        // 플레이어 위치로 돌진
+        this.transform.DOKill();
+        this.transform.DOMove(BaseStage.PlayerUnit.transform.position, 0.2f).SetEase(Ease.InQuad).OnComplete(() =>
+        {
+            // 나머지 HP를 플레이어에게 데미지로 줌
+            if (EnemyInfoData.CurHp > 0)
+            {
+                BaseStage.PlayerUnit.Damage((int)EnemyInfoData.CurHp);
+            }
+            
+            // 자신은 사라짐
+            Dead();
+        });
     }
 
 
     private bool IsDamageDirect = false;
+    private bool IsRushing = false;
 
     public virtual void DamageColorEffect()
     {
@@ -157,6 +207,10 @@ public class EnemyUnit : MonoBehaviour
             });
         }
     }
+
+
+
+
 
 }
 

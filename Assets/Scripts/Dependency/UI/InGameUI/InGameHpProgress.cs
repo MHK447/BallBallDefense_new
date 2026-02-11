@@ -51,10 +51,10 @@ public class InGameHpProgress : InGameFloatingUI
         DelayHealthBar.value = (float)curhp / (float)maxhp;
 
         // HpSlider는 천천히 감소 (빨간색 바)
-        if (Col != null)
-            GameRoot.Instance.StopCoroutine(Col);
+        // if (Col != null)
+        //     GameRoot.Instance.StopCoroutine(Col);
 
-        Col = GameRoot.Instance.StartCoroutine(UpdateDelayedHealthBar(curhpvalue));
+        // Col = GameRoot.Instance.StartCoroutine(UpdateDelayedHealthBar(curhpvalue));
 
         HpText.text = curhp.ToString();
     }
@@ -71,21 +71,21 @@ public class InGameHpProgress : InGameFloatingUI
     }
 
 
-    private IEnumerator UpdateDelayedHealthBar(double hp)
-    {
-        float preChangePct = HpSlider.value;
-        float elapsed = 0f;
+    // private IEnumerator UpdateDelayedHealthBar(double hp)
+    // {
+    //     float preChangePct = HpSlider.value;
+    //     float elapsed = 0f;
 
-        while (elapsed < updatespeed)
-        {
-            elapsed += Time.deltaTime;
-            HpSlider.value = Mathf.Lerp(preChangePct, (float)hp, elapsed / updatespeed);
-            yield return null;
-        }
+    //     while (elapsed < updatespeed)
+    //     {
+    //         elapsed += Time.deltaTime;
+    //         HpSlider.value = Mathf.Lerp(preChangePct, (float)hp, elapsed / updatespeed);
+    //         yield return null;
+    //     }
 
-        HpSlider.value = (float)hp;
+    //     HpSlider.value = (float)hp;
 
 
-        HpText.text = hp.ToString();
-    }
+    //     HpText.text = hp.ToString();
+    // }
 }

@@ -19,11 +19,6 @@ public class CastleHpProgress : InGameFloatingUI
     [SerializeField]
     private TextMeshProUGUI HpText;
 
-    [SerializeField]
-    private TextMeshProUGUI ShiledText;
-
-    [SerializeField]
-    private Transform ShiledRoot;
 
     public float updatespeed = 1f;
 
@@ -50,7 +45,7 @@ public class CastleHpProgress : InGameFloatingUI
 
         disposables.Clear();
 
-        GameRoot.Instance.UserData.Playerdata.CurShiledProperty.Subscribe(x =>
+        GameRoot.Instance.UserData.InGamePlayerData.CurShiledProperty.Subscribe(x =>
         {
             SetShiled(x);
         }).AddTo(disposables);
@@ -80,10 +75,7 @@ public class CastleHpProgress : InGameFloatingUI
 
     public void SetShiled(int shield)
     {
-        CurShield = shield;
-        ProjectUtility.SetActiveCheck(ShiledRoot.gameObject, shield > 0);
-
-        ShiledText.text = shield.ToString();
+       
     }
 
     private void OnDisable()

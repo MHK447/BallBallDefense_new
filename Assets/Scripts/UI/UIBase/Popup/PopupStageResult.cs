@@ -226,7 +226,7 @@ public class PopupStageResult : CommonUIBase
 
         if (IsSuccess)
         {
-            GameRoot.Instance.UserData.Playerdata.Playerlevel += 1;
+            GameRoot.Instance.UserData.InGamePlayerData.Playerlevel += 1;
             GameRoot.Instance.UserData.Stageidx.Value += 1;
         }
         else

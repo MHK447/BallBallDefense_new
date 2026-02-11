@@ -101,12 +101,12 @@ public class GameNotificationSystem
                     var data = GetData(category, -1, -1);
                     if (data != null)
                     {
-                        var NextBuyOrder = GameRoot.Instance.UserData.Newtrainingdatabuyorder.Value + 1;
+                        var NextBuyOrder = GameRoot.Instance.UserData.InGamePlayerData.InGameUpgradeCountProperty.Value + 1;
 
 
                         var td = Tables.Instance.GetTable<BlockTrainingInfo>().GetData(NextBuyOrder);
 
-                        var level = GameRoot.Instance.UserData.Playerdata.Playerlevel;
+                        var level = GameRoot.Instance.UserData.InGamePlayerData.Playerlevel;
 
                         if (td != null)
                         {

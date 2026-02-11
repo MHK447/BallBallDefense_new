@@ -44,7 +44,7 @@ public partial class UserDataSystem
     public bool AutoFelling { get; set; } = false;
     public bool SubscribeOrder { get; set; } = true;
 
-    public PlayerData InGamePlayerData { get; private set; } = new PlayerData();
+    public InGamePlayerData InGamePlayerData { get; private set; } = new InGamePlayerData();
 
 
     public IUserDataMode CurMode { get; private set; }
@@ -106,7 +106,6 @@ public partial class UserDataSystem
         /* 아래 @주석 위치를 찾아서 함수가 자동 추가됩니다 ConnectReadOnlyDatas 함수에서 SetLoadDatas를 호출해주세요 */
         // @자동 로드 데이터 함수들
         LoadData_CardData();
-        LoadData_PlayerData();
         LoadData_StageRewardBoxGroupData();
         LoadData_TrainingGroupData();
         LoadData_UnitGroupData();
